@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Complaint History</title>
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body data-page="history">
+    <div class="app-layout">
+      <aside class="sidebar">
+        <div>
+          <p class="eyebrow">Student Panel</p>
+          <h2>SCMS</h2>
+        </div>
+        <nav>
+          <a href="./dashboard.html" class="nav-link"><span class="nav-icon">&#8962;</span> Dashboard</a>
+          <a href="./register.html" class="nav-link"><span class="nav-icon">&#9998;</span> Register Complaint</a>
+          <a href="./complaints.html" class="nav-link"><span class="nav-icon">&#128196;</span> All Complaints</a>
+          <a href="./history.html" class="nav-link active"><span class="nav-icon">&#128337;</span> My History</a>
+        </nav>
+        <button class="btn btn-secondary" onclick="logout()">Logout</button>
+      </aside>
+
+      <main class="content">
+        <section class="card">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">My Complaints</p>
+              <h1>Complaint history</h1>
+            </div>
+          </div>
+          <div id="historyList" class="stack-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="../script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VFSTR Complaint Portal</title>
+    
+    <style>
+        /* 1. GLOBAL RESET */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; /* Prevents scrollbars during animation */
+        }
+
+        /* 2. THE ANIMATION CONTAINER */
+        .auth-shell {
+            display: flex;
+            width: 100vw; 
+            height: 100vh;
+            position: relative;
+            transition: all 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        /* 3. GREEN BRANDING PANEL (LEFT SIDE) */
+        .brand-panel {
+            width: 100vw; /* Starts full width */
+            height: 100vh;
+            background: linear-gradient(135deg, #4b5d2d 0%, #2e3b1c 100%);
+            color: white;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding-left: 8%;
+            box-sizing: border-box;
+            z-index: 2;
+            transition: width 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        /* 4. LOGIN FORM PANEL (RIGHT SIDE - HIDDEN INITIALLY) */
+        .form-panel {
+            width: 0vw; /* Hidden initially */
+            height: 100vh;
+            background: #fdfdfd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: width 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        /* 5. TRIGGER: SPLIT SCREEN STATE */
+        /* When this class is added, the widths change to 50/50 */
+        .is-split .brand-panel {
+            width: 50vw;
+        }
+        .is-split .form-panel {
+            width: 50vw;
+        }
+
+        /* --- DECORATIONS & TYPOGRAPHY --- */
+        .brand-content { display: flex; align-items: flex-start; }
+
+        .eyebrow {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-right: 30px;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 4rem); /* Responsive font size */
+            line-height: 1.1;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .resolve-btn-container {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+        }
+
+        .resolve-btn {
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 10px 25px;
+            text-decoration: none;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            background: transparent;
+            transition: 0.3s;
+        }
+
+        .resolve-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+
+        .circle-deco {
+            position: absolute;
+            bottom: -80px;
+            right: -80px;
+            width: 350px;
+            height: 350px;
+            border: 25px solid rgba(255, 255, 255, 0.04);
+            border-radius: 50%;
+        }
+
+        /* LOGIN CARD */
+        .auth-card {
+            width: 350px;
+            padding: 40px;
+            background: white;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            opacity: 0; /* Hidden until split */
+            transform: translateY(20px);
+            transition: 0.5s 0.6s ease; /* Delayed until split is almost done */
+        }
+
+        .is-split .auth-card {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .auth-card h2 { margin-bottom: 25px; color: #333; }
+        .auth-card label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: #666; }
+        .auth-card input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: #5a7a2a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body data-page="login">
+
+    <main class="auth-shell" id="mainShell">
+        
+        <section class="brand-panel">
+            <div class="resolve-btn-container">
+                <button class="resolve-btn" onclick="splitScreen()">RESOLVE</button>
+            </div>
+            
+            <div class="brand-content">
+                <p class="eyebrow">Campus Support Portal</p>
+                <h1>VFSTR Complaint<br>Management System</h1>
+            </div>
+
+            <div class="circle-deco"></div>
+        </section>
+
+        <section class="form-panel">
+            <form class="auth-card" id="loginForm" onsubmit="handleLogin(event)">
+                <h2>Login</h2>
+                <div id="errorMessage" style="color: red; font-size: 0.9rem; margin-bottom: 15px; display: none;"></div>
+                
+                <label>Username</label>
+                <input type="text" id="username" placeholder="Enter username" required>
+                
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Enter password" required>
+                
+                <button type="submit" class="btn-login">Login</button>
+                
+                <p style="font-size: 0.85rem; color: #888; text-align: center; margin-top: 20px;">
+                    New here? <a href="/frontend/signup.html" style="color: #5a7a2a; font-weight: bold; text-decoration: none;">Create an account</a>
+                </p>
+            </form>
+        </section>
+
+    </main>
+
+    <script>
+        // Trigger split screen animation on page load
+        window.addEventListener('load', () => {
+            setTimeout(splitScreen, 300);
+        });
+
+        function splitScreen() {
+            // Adds the 'is-split' class to trigger the CSS transition
+            document.getElementById('mainShell').classList.add('is-split');
+        }
+
+        const API_BASE =
+            window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? 'http://localhost:5000/api'
+                : `${window.location.origin}/api`;
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorDiv = document.getElementById('errorMessage');
+            
+            // Clear previous error
+            errorDiv.style.display = 'none';
+            errorDiv.textContent = '';
+
+            if (!username || !password) {
+                errorDiv.textContent = 'Username and password are required.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json().catch(() => ({ message: 'Server returned an invalid response.' }));
+
+                if (response.ok) {
+                    // Store user info in localStorage
+                    localStorage.setItem('scmsUser', JSON.stringify(data.user));
+                    
+                    // Redirect based on role
+                    if (data.user.role === 'admin') {
+                        window.location.href = '/frontend/admin-dashboard.html';
+                    } else {
+                        window.location.href = '/frontend/dashboard.html';
+                    }
+                } else {
+                    errorDiv.textContent = data.message || 'Login failed. Please try again.';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.textContent = 'Connection error. Please check backend server and MongoDB are running.';
+                errorDiv.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

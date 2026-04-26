@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register Complaint</title>
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body data-page="register-complaint">
+    <div class="app-layout">
+      <aside class="sidebar">
+        <div>
+          <p class="eyebrow">Student Panel</p>
+          <h2>SCMS</h2>
+        </div>
+        <nav>
+          <a href="./dashboard.html" class="nav-link"><span class="nav-icon">&#8962;</span> Dashboard</a>
+          <a href="./register.html" class="nav-link active"><span class="nav-icon">&#9998;</span> Register Complaint</a>
+          <a href="./complaints.html" class="nav-link"><span class="nav-icon">&#128196;</span> All Complaints</a>
+          <a href="./history.html" class="nav-link"><span class="nav-icon">&#128337;</span> My History</a>
+        </nav>
+        <button class="btn btn-secondary" onclick="logout()">Logout</button>
+      </aside>
+
+      <main class="content">
+        <section class="card form-card">
+          <p class="eyebrow">New Complaint</p>
+          <h1>Register a complaint</h1>
+          <form id="complaintForm" class="stack-form">
+            <label>
+              Category
+              <select id="complaintCategory" required>
+                <option value="">Select category</option>
+                <option value="Hostel">Hostel</option>
+                <option value="Mess">Mess</option>
+                <option value="Transport">Transport</option>
+                <option value="Infrastructure">Infrastructure</option>
+                <option value="Academic">Academic</option>
+                <option value="Other">Other</option>
+              </select>
+            </label>
+            <label>
+              Description
+              <textarea
+                id="complaintDescription"
+                rows="6"
+                placeholder="Describe the issue clearly"
+                required
+              ></textarea>
+            </label>
+            <button type="submit" class="btn btn-primary">Submit Complaint</button>
+            <p id="complaintMessage" class="message"></p>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <script src="../script.js"></script>
+  </body>
+</html>

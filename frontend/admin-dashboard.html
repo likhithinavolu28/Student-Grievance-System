@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body data-page="admin-dashboard">
+    <div class="app-layout">
+      <aside class="sidebar admin-sidebar">
+        <div>
+          <p class="eyebrow">Admin Panel</p>
+          <h2>SCMS</h2>
+        </div>
+        <nav>
+          <a href="./admin-dashboard.html" class="nav-link active"><span class="nav-icon">&#128200;</span> Dashboard</a>
+          <a href="./admin-complaints.html" class="nav-link"><span class="nav-icon">&#128736;</span> Manage Complaints</a>
+        </nav>
+        <button class="btn btn-secondary" onclick="logout()">Logout</button>
+      </aside>
+
+      <main class="content">
+        <section class="hero card admin-hero">
+          <p class="eyebrow">Overview</p>
+          <h1 id="adminGreeting">Admin Dashboard</h1>
+          <p>Track complaint volume and resolution progress from one central panel.</p>
+        </section>
+
+        <section class="grid stats-grid">
+          <article class="card stat-card">
+            <span class="stat-icon">&#128203;</span>
+            <h3>Total Complaints</h3>
+            <p id="adminTotalComplaints">0</p>
+          </article>
+          <article class="card stat-card">
+            <span class="stat-icon">&#9203;</span>
+            <h3>Pending</h3>
+            <p id="adminPendingComplaints">0</p>
+          </article>
+          <article class="card stat-card">
+            <span class="stat-icon">&#9881;</span>
+            <h3>Processing</h3>
+            <p id="adminProcessingComplaints">0</p>
+          </article>
+          <article class="card stat-card">
+            <span class="stat-icon">&#10003;</span>
+            <h3>Resolved</h3>
+            <p id="adminResolvedComplaints">0</p>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="../script.js"></script>
+  </body>
+</html>
