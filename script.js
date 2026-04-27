@@ -1,5 +1,6 @@
 const API_BASE =
-  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
     ? "http://localhost:5000/api"
     : `${window.location.origin}/api`;
 const page = document.body.dataset.page;
@@ -75,12 +76,12 @@ function handleLoginPage() {
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value.trim();
 
-    errorDiv.style.display = 'none';
-    errorDiv.textContent = '';
+    errorDiv.style.display = "none";
+    errorDiv.textContent = "";
 
     if (!username || !password) {
-      errorDiv.textContent = 'Username and password are required.';
-      errorDiv.style.display = 'block';
+      errorDiv.textContent = "Username and password are required.";
+      errorDiv.style.display = "block";
       return;
     }
 
@@ -88,7 +89,7 @@ function handleLoginPage() {
       const response = await fetch(`${API_BASE}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await response.json();
@@ -99,7 +100,7 @@ function handleLoginPage() {
       localStorage.setItem("scmsUser", JSON.stringify(data.user));
       errorDiv.textContent = "Login successful. Redirecting...";
       errorDiv.style.color = "#15803d";
-      errorDiv.style.display = 'block';
+      errorDiv.style.display = "block";
 
       setTimeout(() => {
         if (data.user.role === "admin") {
@@ -111,7 +112,7 @@ function handleLoginPage() {
     } catch (error) {
       errorDiv.textContent = error.message;
       errorDiv.style.color = "#b91c1c";
-      errorDiv.style.display = 'block';
+      errorDiv.style.display = "block";
     }
   });
 }
@@ -122,7 +123,7 @@ function handleSignupPage() {
     console.error("signupForm not found in DOM");
     return;
   }
-  
+
   const message = document.getElementById("signupMessage");
 
   form.addEventListener("submit", async (event) => {
@@ -148,7 +149,7 @@ function handleSignupPage() {
       const response = await fetch(`${API_BASE}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, role })
+        body: JSON.stringify({ username, password, role }),
       });
 
       const data = await response.json();
@@ -156,10 +157,11 @@ function handleSignupPage() {
         throw new Error(data.message);
       }
 
-      message.textContent = "Account created successfully. Redirecting to login...";
+      message.textContent =
+        "Account created successfully. Redirecting to login...";
       message.style.color = "#15803d";
       form.reset();
-      
+
       setTimeout(() => {
         window.location.href = "/frontend/login.html";
       }, 1500);
@@ -194,7 +196,9 @@ function handleComplaintRegistration() {
     }
 
     const category = document.getElementById("complaintCategory").value;
-    const description = document.getElementById("complaintDescription").value.trim();
+    const description = document
+      .getElementById("complaintDescription")
+      .value.trim();
 
     if (!category) {
       message.textContent = "Please select a category.";
@@ -215,8 +219,8 @@ function handleComplaintRegistration() {
         body: JSON.stringify({
           category,
           description,
-          userId: user._id
-        })
+          userId: user._id,
+        }),
       });
 
       const data = await response.json();
@@ -227,7 +231,7 @@ function handleComplaintRegistration() {
       message.textContent = data.message;
       message.style.color = "#15803d";
       form.reset();
-      
+
       setTimeout(() => {
         window.location.href = "/frontend/dashboard.html";
       }, 1500);
@@ -240,14 +244,21 @@ function handleComplaintRegistration() {
 
 async function renderStudentDashboard() {
   const user = getCurrentUser();
-  document.getElementById("studentGreeting").textContent = `Welcome, ${user.username}`;
+  document.getElementById(
+    "studentGreeting"
+  ).textContent = `Welcome, ${user.username}`;
 
   try {
     const complaints = await fetchUserComplaints(user._id);
-    const pending = complaints.filter((item) => item.status === "Pending").length;
-    const resolved = complaints.filter((item) => item.status === "Resolved").length;
+    const pending = complaints.filter(
+      (item) => item.status === "Pending"
+    ).length;
+    const resolved = complaints.filter(
+      (item) => item.status === "Resolved"
+    ).length;
 
-    document.getElementById("studentTotalComplaints").textContent = complaints.length;
+    document.getElementById("studentTotalComplaints").textContent =
+      complaints.length;
     document.getElementById("studentPendingComplaints").textContent = pending;
     document.getElementById("studentResolvedComplaints").textContent = resolved;
 
@@ -281,7 +292,9 @@ async function renderAllComplaints() {
       return;
     }
 
-    container.innerHTML = complaints.map((complaint) => createComplaintCard(complaint)).join("");
+    container.innerHTML = complaints
+      .map((complaint) => createComplaintCard(complaint))
+      .join("");
   } catch (error) {
     showSimpleError("complaintsList", error.message);
   }
@@ -308,7 +321,9 @@ async function renderComplaintHistory() {
 
 async function renderAdminDashboard() {
   const user = getCurrentUser();
-  document.getElementById("adminGreeting").textContent = `Welcome, ${user.username}`;
+  document.getElementById(
+    "adminGreeting"
+  ).textContent = `Welcome, ${user.username}`;
 
   try {
     const response = await fetch(`${API_BASE}/complaints`);
@@ -317,16 +332,14 @@ async function renderAdminDashboard() {
       throw new Error(complaints.message || "Could not load complaints.");
     }
 
-    document.getElementById("adminTotalComplaints").textContent = complaints.length;
-    document.getElementById("adminPendingComplaints").textContent = complaints.filter(
-      (item) => item.status === "Pending"
-    ).length;
-    document.getElementById("adminProcessingComplaints").textContent = complaints.filter(
-      (item) => item.status === "Processing"
-    ).length;
-    document.getElementById("adminResolvedComplaints").textContent = complaints.filter(
-      (item) => item.status === "Resolved"
-    ).length;
+    document.getElementById("adminTotalComplaints").textContent =
+      complaints.length;
+    document.getElementById("adminPendingComplaints").textContent =
+      complaints.filter((item) => item.status === "Pending").length;
+    document.getElementById("adminProcessingComplaints").textContent =
+      complaints.filter((item) => item.status === "Processing").length;
+    document.getElementById("adminResolvedComplaints").textContent =
+      complaints.filter((item) => item.status === "Resolved").length;
   } catch (error) {
     console.error(error.message);
   }
@@ -352,7 +365,9 @@ async function renderAdminComplaintsTable() {
         (complaint) => `
           <tr>
             <td>${complaint._id}</td>
-            <td><span class="pill">${getCategoryIcon(complaint.category)} ${escapeHtml(complaint.category)}</span></td>
+            <td><span class="pill">${getCategoryIcon(
+              complaint.category
+            )} ${escapeHtml(complaint.category)}</span></td>
             <td>${escapeHtml(complaint.description)}</td>
             <td>${complaint.votes}</td>
             <td>
@@ -360,7 +375,9 @@ async function renderAdminComplaintsTable() {
                 ${["Pending", "Processing", "Resolved", "Rejected"]
                   .map(
                     (status) =>
-                      `<option value="${status}" ${complaint.status === status ? "selected" : ""}>${status}</option>`
+                      `<option value="${status}" ${
+                        complaint.status === status ? "selected" : ""
+                      }>${status}</option>`
                   )
                   .join("")}
               </select>
@@ -375,7 +392,9 @@ async function renderAdminComplaintsTable() {
               />
             </td>
             <td>
-              <button class="btn btn-primary btn-small" onclick="updateComplaintStatus('${complaint._id}')">
+              <button class="btn btn-primary btn-small" onclick="updateComplaintStatus('${
+                complaint._id
+              }')">
                 Update
               </button>
             </td>
@@ -393,7 +412,7 @@ async function voteComplaint(complaintId, value) {
     const response = await fetch(`${API_BASE}/complaints/${complaintId}/vote`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ value })
+      body: JSON.stringify({ value }),
     });
 
     const data = await response.json();
@@ -409,14 +428,19 @@ async function voteComplaint(complaintId, value) {
 
 async function updateComplaintStatus(complaintId) {
   const status = document.getElementById(`status-${complaintId}`).value;
-  const remarks = document.getElementById(`remarks-${complaintId}`).value.trim();
+  const remarks = document
+    .getElementById(`remarks-${complaintId}`)
+    .value.trim();
 
   try {
-    const response = await fetch(`${API_BASE}/complaints/${complaintId}/status`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status, remarks })
-    });
+    const response = await fetch(
+      `${API_BASE}/complaints/${complaintId}/status`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status, remarks }),
+      }
+    );
 
     const data = await response.json();
     if (!response.ok) {
@@ -438,7 +462,7 @@ async function withdrawComplaint(complaintId) {
 
   try {
     const response = await fetch(`${API_BASE}/complaints/${complaintId}`, {
-      method: "DELETE"
+      method: "DELETE",
     });
 
     const data = await response.json();
@@ -473,18 +497,28 @@ function createComplaintCard(complaint) {
   return `
     <article class="complaint-item">
       <div class="complaint-card-head">
-        <span class="category-icon">${getCategoryIcon(complaint.category)}</span>
+        <span class="category-icon">${getCategoryIcon(
+          complaint.category
+        )}</span>
         <span class="pill">${escapeHtml(complaint.category)}</span>
       </div>
       <h3>${escapeHtml(complaint.description)}</h3>
       <div class="meta-row">
-        <span class="status-pill status-${complaint.status.toLowerCase()}">Status: ${complaint.status}</span>
+        <span class="status-pill status-${complaint.status.toLowerCase()}">Status: ${
+    complaint.status
+  }</span>
         <span class="status-pill">Votes: ${complaint.votes}</span>
       </div>
-      <p><strong>Remarks:</strong> ${escapeHtml(complaint.remarks || "No remarks yet.")}</p>
+      <p><strong>Remarks:</strong> ${escapeHtml(
+        complaint.remarks || "No remarks yet."
+      )}</p>
       <div class="vote-row">
-        <button class="btn btn-primary btn-small" onclick="voteComplaint('${complaint._id}', 1)">&#128077; Upvote</button>
-        <button class="btn btn-danger btn-small" onclick="voteComplaint('${complaint._id}', -1)">&#128078; Downvote</button>
+        <button class="btn btn-primary btn-small" onclick="voteComplaint('${
+          complaint._id
+        }', 1)">&#128077; Upvote</button>
+        <button class="btn btn-danger btn-small" onclick="voteComplaint('${
+          complaint._id
+        }', -1)">&#128078; Downvote</button>
       </div>
     </article>
   `;
@@ -494,15 +528,21 @@ function createHistoryCard(complaint, allowWithdraw) {
   return `
     <article class="list-item">
       <div class="complaint-card-head">
-        <span class="category-icon">${getCategoryIcon(complaint.category)}</span>
+        <span class="category-icon">${getCategoryIcon(
+          complaint.category
+        )}</span>
         <span class="pill">${escapeHtml(complaint.category)}</span>
       </div>
       <h3>${escapeHtml(complaint.description)}</h3>
       <div class="meta-row">
-        <span class="status-pill status-${complaint.status.toLowerCase()}">Status: ${complaint.status}</span>
+        <span class="status-pill status-${complaint.status.toLowerCase()}">Status: ${
+    complaint.status
+  }</span>
         <span class="status-pill">Votes: ${complaint.votes}</span>
       </div>
-      <p><strong>Remarks:</strong> ${escapeHtml(complaint.remarks || "No remarks yet.")}</p>
+      <p><strong>Remarks:</strong> ${escapeHtml(
+        complaint.remarks || "No remarks yet."
+      )}</p>
       ${
         allowWithdraw
           ? `<div class="action-row"><button class="btn btn-danger btn-small" onclick="withdrawComplaint('${complaint._id}')">Withdraw Complaint</button></div>`

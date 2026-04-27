@@ -1,362 +1,381 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Account | VFSTR Complaint Portal</title>
-    
+
     <style>
-        /* 1. GLOBAL RESET */
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden; /* Prevents scrollbars during animation */
-        }
+      /* 1. GLOBAL RESET */
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        overflow: hidden; /* Prevents scrollbars during animation */
+      }
 
-        /* 2. THE ANIMATION CONTAINER */
-        .auth-shell {
-            display: flex;
-            width: 100vw; 
-            height: 100vh;
-            position: relative;
-            transition: all 0.8s cubic-bezier(0.77, 0, 0.175, 1);
-        }
+      /* 2. THE ANIMATION CONTAINER */
+      .auth-shell {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        transition: all 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+      }
 
-        /* 3. GREEN BRANDING PANEL (LEFT SIDE) */
-        .brand-panel {
-            width: 100vw; /* Starts full width */
-            height: 100vh;
-            background: linear-gradient(135deg, #4b5d2d 0%, #2e3b1c 100%);
-            color: white;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            padding-left: 8%;
-            box-sizing: border-box;
-            z-index: 2;
-            transition: width 0.8s cubic-bezier(0.77, 0, 0.175, 1);
-        }
+      /* 3. GREEN BRANDING PANEL (LEFT SIDE) */
+      .brand-panel {
+        width: 100vw; /* Starts full width */
+        height: 100vh;
+        background: linear-gradient(135deg, #4b5d2d 0%, #2e3b1c 100%);
+        color: white;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 8%;
+        box-sizing: border-box;
+        z-index: 2;
+        transition: width 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+      }
 
-        /* 4. SIGNUP FORM PANEL (RIGHT SIDE - HIDDEN INITIALLY) */
-        .form-panel {
-            width: 0vw; /* Hidden initially */
-            height: 100vh;
-            background: #fdfdfd;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            transition: width 0.8s cubic-bezier(0.77, 0, 0.175, 1);
-        }
+      /* 4. SIGNUP FORM PANEL (RIGHT SIDE - HIDDEN INITIALLY) */
+      .form-panel {
+        width: 0vw; /* Hidden initially */
+        height: 100vh;
+        background: #fdfdfd;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        transition: width 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+      }
 
-        /* 5. TRIGGER: SPLIT SCREEN STATE */
-        /* When this class is added, the widths change to 50/50 */
-        .is-split .brand-panel {
-            width: 50vw;
-        }
-        .is-split .form-panel {
-            width: 50vw;
-        }
+      /* 5. TRIGGER: SPLIT SCREEN STATE */
+      /* When this class is added, the widths change to 50/50 */
+      .is-split .brand-panel {
+        width: 50vw;
+      }
+      .is-split .form-panel {
+        width: 50vw;
+      }
 
-        /* --- DECORATIONS & TYPOGRAPHY --- */
-        .brand-content { display: flex; align-items: flex-start; }
+      /* --- DECORATIONS & TYPOGRAPHY --- */
+      .brand-content {
+        display: flex;
+        align-items: flex-start;
+      }
 
-        .eyebrow {
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-right: 30px;
-            font-weight: bold;
-        }
+      .eyebrow {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-right: 30px;
+        font-weight: bold;
+      }
 
-        h1 {
-            font-size: clamp(2rem, 5vw, 4rem); /* Responsive font size */
-            line-height: 1.1;
-            margin: 0;
-            font-weight: 800;
-        }
+      h1 {
+        font-size: clamp(2rem, 5vw, 4rem); /* Responsive font size */
+        line-height: 1.1;
+        margin: 0;
+        font-weight: 800;
+      }
 
-        .brand-description {
-            position: absolute;
-            bottom: 60px;
-            left: 8%;
-            max-width: 400px;
-            font-size: 1rem;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.8);
-        }
+      .brand-description {
+        position: absolute;
+        bottom: 60px;
+        left: 8%;
+        max-width: 400px;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.8);
+      }
 
-        .join-btn-container {
-            position: absolute;
-            top: 30px;
-            right: 40px;
-        }
+      .join-btn-container {
+        position: absolute;
+        top: 30px;
+        right: 40px;
+      }
 
-        .join-btn {
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 10px 25px;
-            text-decoration: none;
-            border-radius: 4px;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            cursor: pointer;
-            background: transparent;
-            transition: 0.3s;
-        }
+      .join-btn {
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        padding: 10px 25px;
+        text-decoration: none;
+        border-radius: 4px;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        cursor: pointer;
+        background: transparent;
+        transition: 0.3s;
+      }
 
-        .join-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: white;
-        }
+      .join-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: white;
+      }
 
-        .circle-deco {
-            position: absolute;
-            bottom: -80px;
-            right: -80px;
-            width: 350px;
-            height: 350px;
-            border: 25px solid rgba(255, 255, 255, 0.04);
-            border-radius: 50%;
-        }
+      .circle-deco {
+        position: absolute;
+        bottom: -80px;
+        right: -80px;
+        width: 350px;
+        height: 350px;
+        border: 25px solid rgba(255, 255, 255, 0.04);
+        border-radius: 50%;
+      }
 
-        /* SIGNUP CARD */
-        .auth-card {
-            width: 350px;
-            padding: 40px;
-            background: white;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-            border-radius: 12px;
-            opacity: 0; /* Hidden until split */
-            transform: translateY(20px);
-            transition: 0.5s 0.6s ease; /* Delayed until split is almost done */
-            max-height: 90vh;
-            overflow-y: auto;
-        }
+      /* SIGNUP CARD */
+      .auth-card {
+        width: 350px;
+        padding: 40px;
+        background: white;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
+        opacity: 0; /* Hidden until split */
+        transform: translateY(20px);
+        transition: 0.5s 0.6s ease; /* Delayed until split is almost done */
+        max-height: 90vh;
+        overflow-y: auto;
+      }
 
-        .is-split .auth-card {
-            opacity: 1;
-            transform: translateY(0);
-        }
+      .is-split .auth-card {
+        opacity: 1;
+        transform: translateY(0);
+      }
 
-        .auth-card h2 { 
-            margin-bottom: 25px; 
-            color: #333; 
-        }
+      .auth-card h2 {
+        margin-bottom: 25px;
+        color: #333;
+      }
 
-        .auth-card label { 
-            display: block; 
-            margin-bottom: 8px; 
-            font-size: 0.9rem; 
-            color: #666; 
-            font-weight: 500;
-        }
+      .auth-card label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+        color: #666;
+        font-weight: 500;
+      }
 
-        .auth-card input,
-        .auth-card select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 0.95rem;
-            transition: border-color 0.3s;
-        }
+      .auth-card input,
+      .auth-card select {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 0.95rem;
+        transition: border-color 0.3s;
+      }
 
-        .auth-card input:focus,
-        .auth-card select:focus {
-            outline: none;
-            border-color: #5a7a2a;
-        }
+      .auth-card input:focus,
+      .auth-card select:focus {
+        outline: none;
+        border-color: #5a7a2a;
+      }
 
-        .btn-signup {
-            width: 100%;
-            padding: 12px;
-            background: #5a7a2a;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-            font-size: 1rem;
-        }
+      .btn-signup {
+        width: 100%;
+        padding: 12px;
+        background: #5a7a2a;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s;
+        font-size: 1rem;
+      }
 
-        .btn-signup:hover {
-            background: #4a6620;
-        }
+      .btn-signup:hover {
+        background: #4a6620;
+      }
 
-        .message {
-            font-size: 0.9rem;
-            margin-top: 15px;
-            text-align: center;
-            border-radius: 6px;
-            padding: 10px;
-            display: none;
-        }
+      .message {
+        font-size: 0.9rem;
+        margin-top: 15px;
+        text-align: center;
+        border-radius: 6px;
+        padding: 10px;
+        display: none;
+      }
 
-        .message.success {
-            color: #15803d;
-            background: #dcfce7;
-            display: block;
-        }
+      .message.success {
+        color: #15803d;
+        background: #dcfce7;
+        display: block;
+      }
 
-        .message.error {
-            color: #b91c1c;
-            background: #fee2e2;
-            display: block;
-        }
+      .message.error {
+        color: #b91c1c;
+        background: #fee2e2;
+        display: block;
+      }
 
-        .switch-link {
-            font-size: 0.85rem;
-            color: #888;
-            text-align: center;
-            margin-top: 20px;
-        }
+      .switch-link {
+        font-size: 0.85rem;
+        color: #888;
+        text-align: center;
+        margin-top: 20px;
+      }
 
-        .switch-link a {
-            color: #5a7a2a;
-            font-weight: bold;
-            text-decoration: none;
-        }
+      .switch-link a {
+        color: #5a7a2a;
+        font-weight: bold;
+        text-decoration: none;
+      }
 
-        .switch-link a:hover {
-            text-decoration: underline;
-        }
+      .switch-link a:hover {
+        text-decoration: underline;
+      }
     </style>
-</head>
-<body data-page="signup">
-
+  </head>
+  <body data-page="signup">
     <main class="auth-shell" id="mainShell">
-        
-        <section class="brand-panel">
-            <div class="join-btn-container">
-                <button class="join-btn" onclick="splitScreen()">JOIN NOW</button>
-            </div>
-            
-            <div class="brand-content">
-                <p class="eyebrow">Create Account</p>
-                <div>
-                    <h1>Join VFSTR<br>Complaint Portal</h1>
-                    <p class="brand-description">
-                        Create your account to submit complaints, track progress, and engage with peer issues. 
-                        Choose your role - Student or Admin - and start making a difference today.
-                    </p>
-                </div>
-            </div>
+      <section class="brand-panel">
+        <div class="join-btn-container">
+          <button class="join-btn" onclick="splitScreen()">JOIN NOW</button>
+        </div>
 
-            <div class="circle-deco"></div>
-        </section>
+        <div class="brand-content">
+          <p class="eyebrow">Create Account</p>
+          <div>
+            <h1>Join VFSTR<br />Complaint Portal</h1>
+            <p class="brand-description">
+              Create your account to submit complaints, track progress, and
+              engage with peer issues. Choose your role - Student or Admin - and
+              start making a difference today.
+            </p>
+          </div>
+        </div>
 
-        <section class="form-panel">
-            <form class="auth-card" id="signupForm" onsubmit="handleSignup(event)">
-                <h2>Create Account</h2>
-                <div id="signupMessage" class="message"></div>
-                
-                <label>Username</label>
-                <input type="text" id="signupUsername" placeholder="Choose username" required>
-                
-                <label>Password</label>
-                <input type="password" id="signupPassword" placeholder="Create password (min 6 chars)" required>
-                
-                <label>Role</label>
-                <select id="signupRole" required>
-                    <option value="">Select your role</option>
-                    <option value="student">Student</option>
-                    <option value="admin">Admin</option>
-                </select>
-                
-                <button type="submit" class="btn-signup">Create Account</button>
-                
-                <p class="switch-link">
-                    Already have an account? <a href="/frontend/login.html">Login here</a>
-                </p>
-            </form>
-        </section>
+        <div class="circle-deco"></div>
+      </section>
 
+      <section class="form-panel">
+        <form class="auth-card" id="signupForm" onsubmit="handleSignup(event)">
+          <h2>Create Account</h2>
+          <div id="signupMessage" class="message"></div>
+
+          <label>Username</label>
+          <input
+            type="text"
+            id="signupUsername"
+            placeholder="Choose username"
+            required
+          />
+
+          <label>Password</label>
+          <input
+            type="password"
+            id="signupPassword"
+            placeholder="Create password (min 6 chars)"
+            required
+          />
+
+          <label>Role</label>
+          <select id="signupRole" required>
+            <option value="">Select your role</option>
+            <option value="student">Student</option>
+            <option value="admin">Admin</option>
+          </select>
+
+          <button type="submit" class="btn-signup">Create Account</button>
+
+          <p class="switch-link">
+            Already have an account?
+            <a href="/frontend/login.html">Login here</a>
+          </p>
+        </form>
+      </section>
     </main>
 
     <script>
-        // Trigger split screen animation on page load
-        window.addEventListener('load', () => {
-            setTimeout(splitScreen, 300);
-        });
+      // Trigger split screen animation on page load
+      window.addEventListener("load", () => {
+        setTimeout(splitScreen, 300);
+      });
 
-        function splitScreen() {
-            // Adds the 'is-split' class to trigger the CSS transition
-            document.getElementById('mainShell').classList.add('is-split');
+      function splitScreen() {
+        // Adds the 'is-split' class to trigger the CSS transition
+        document.getElementById("mainShell").classList.add("is-split");
+      }
+
+      const API_BASE =
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1"
+          ? "http://localhost:5000/api"
+          : `${window.location.origin}/api`;
+
+      async function handleSignup(event) {
+        event.preventDefault();
+
+        const username = document.getElementById("signupUsername").value.trim();
+        const password = document.getElementById("signupPassword").value.trim();
+        const role = document.getElementById("signupRole").value;
+        const messageDiv = document.getElementById("signupMessage");
+
+        // Clear previous message
+        messageDiv.className = "message";
+        messageDiv.textContent = "";
+
+        // Validation
+        if (!username || username.length < 3) {
+          messageDiv.textContent = "Username must be at least 3 characters.";
+          messageDiv.classList.add("error");
+          return;
         }
 
-        const API_BASE =
-            window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                ? 'http://localhost:5000/api'
-                : `${window.location.origin}/api`;
-
-        async function handleSignup(event) {
-            event.preventDefault();
-            
-            const username = document.getElementById('signupUsername').value.trim();
-            const password = document.getElementById('signupPassword').value.trim();
-            const role = document.getElementById('signupRole').value;
-            const messageDiv = document.getElementById('signupMessage');
-            
-            // Clear previous message
-            messageDiv.className = 'message';
-            messageDiv.textContent = '';
-
-            // Validation
-            if (!username || username.length < 3) {
-                messageDiv.textContent = 'Username must be at least 3 characters.';
-                messageDiv.classList.add('error');
-                return;
-            }
-
-            if (!password || password.length < 6) {
-                messageDiv.textContent = 'Password must be at least 6 characters.';
-                messageDiv.classList.add('error');
-                return;
-            }
-
-            if (!role) {
-                messageDiv.textContent = 'Please select a role.';
-                messageDiv.classList.add('error');
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE}/signup`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password, role })
-                });
-
-                const data = await response.json().catch(() => ({ message: 'Server returned an invalid response.' }));
-
-                if (response.ok) {
-                    messageDiv.textContent = '✓ Account created successfully! Redirecting to login...';
-                    messageDiv.classList.add('success');
-                    
-                    setTimeout(() => {
-                        window.location.href = '/frontend/login.html';
-                    }, 1500);
-                } else {
-                    messageDiv.textContent = data.message || 'Signup failed. Please try again.';
-                    messageDiv.classList.add('error');
-                }
-            } catch (error) {
-                messageDiv.textContent = 'Connection error. Please check backend server and MongoDB are running.';
-                messageDiv.classList.add('error');
-            }
+        if (!password || password.length < 6) {
+          messageDiv.textContent = "Password must be at least 6 characters.";
+          messageDiv.classList.add("error");
+          return;
         }
+
+        if (!role) {
+          messageDiv.textContent = "Please select a role.";
+          messageDiv.classList.add("error");
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API_BASE}/signup`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password, role }),
+          });
+
+          const data = await response
+            .json()
+            .catch(() => ({ message: "Server returned an invalid response." }));
+
+          if (response.ok) {
+            messageDiv.textContent =
+              "✓ Account created successfully! Redirecting to login...";
+            messageDiv.classList.add("success");
+
+            setTimeout(() => {
+              window.location.href = "/frontend/login.html";
+            }, 1500);
+          } else {
+            messageDiv.textContent =
+              data.message || "Signup failed. Please try again.";
+            messageDiv.classList.add("error");
+          }
+        } catch (error) {
+          messageDiv.textContent =
+            "Connection error. Please check backend server and MongoDB are running.";
+          messageDiv.classList.add("error");
+        }
+      }
     </script>
-</body>
+  </body>
 </html>
